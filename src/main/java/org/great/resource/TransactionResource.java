@@ -11,7 +11,8 @@ import org.great.dto.TransactionRequest;
 import org.great.repository.TransactionRepository;
 import org.great.saga.SagaService;
 import jakarta.validation.Valid;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
@@ -23,14 +24,19 @@ public class TransactionResource {
     private final TransactionRepository repo;
     private final SagaService saga;
 
+    private final Logger logger = LoggerFactory.getLogger(TransactionResource.class);
+
     public TransactionResource(TransactionRepository repo, SagaService saga) {
         this.repo = repo; this.saga = saga;
     }
 
     @POST
+    @Path("/start")
     @RolesAllowed({"ROLE_USER","ROLE_ADMIN"})
     @Transactional
     public Response transfer(@Context HttpHeaders headers, @Valid TransactionRequest req) {
+        logger.info("Transfer started from {} to {} amount {}",
+                req.sourceAccount(), req.targetAccount(), req.amount());
         if (req.sourceAccount().equals(req.targetAccount())) throw new WebApplicationException("Same account", 400);
         if (req.amount() == null || req.amount().signum() <= 0) throw new WebApplicationException("Invalid amount", 400);
 

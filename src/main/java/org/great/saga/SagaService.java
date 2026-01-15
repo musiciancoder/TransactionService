@@ -9,6 +9,8 @@ import org.great.dto.TransactionRequest;
 import org.great.entity.Transaction;
 import org.great.messaging.OutcomeEventsProducer;
 import org.great.repository.TransactionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.OffsetDateTime;
 
@@ -21,6 +23,8 @@ public class SagaService {
     AccountsClient accounts;
     @Inject
     OutcomeEventsProducer events;
+
+    private final Logger logger = LoggerFactory.getLogger(SagaService.class);
 
     @Transactional
     public Transaction start(TransactionRequest req, String correlationId) {
@@ -38,6 +42,7 @@ public class SagaService {
 
     public void execute(Transaction t) {
         try {
+            logger.info("Saga started for transaction id {}", t.id);
             accounts.reserve(t.sourceAccount, t.amount, t.correlationId);
             accounts.credit(t.targetAccount, t.amount, t.correlationId);
             markCompleted(t);
