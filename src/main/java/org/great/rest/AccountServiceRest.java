@@ -5,8 +5,10 @@ import jakarta.ws.rs.core.MediaType;
 import org.great.dto.CreditRequest;
 import org.great.dto.ReleaseRequest;
 import org.great.dto.ReserveRequest;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-//@RegisterRestClient(configKey = "account-service") //todo docker installation
+
+@RegisterRestClient(configKey = "account-service") //
 @Path("/accounts")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)

@@ -1,12 +1,15 @@
 package org.great.messaging;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.great.dto.TransferEvent;
 import org.great.entity.Transaction;
 
 @ApplicationScoped
-public class OutcomeEventsProducer {}
-/*    @Channel("events-transfers-completed") Emitter<TransferEvent> completed;
+public class OutcomeEventsProducer {
+    @Channel("events-transfers-completed")
+    Emitter<TransferEvent> completed;
     @Channel("events-transfers-failed")  Emitter<TransferEvent> failed;
 
     public void emitCompleted(Transaction t) {
@@ -19,4 +22,4 @@ public class OutcomeEventsProducer {}
                 t.id.toString(), "FAILED", t.sourceAccount, t.targetAccount, t.amount, t.correlationId, reason
         ));
     }
-}*/
+}

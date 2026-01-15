@@ -54,12 +54,12 @@ public class SagaService {
     @Transactional
     void markCompleted(Transaction t) {
         t.status = "COMPLETED";
-     //   events.emitCompleted(t);
+        events.emitCompleted(t);
     }
 
     @Transactional
     void markFailed(Transaction t, String reason) {
         t.status = "FAILED";
-     //   events.emitFailed(t, reason);
+        events.emitFailed(t, reason);
     }
 }

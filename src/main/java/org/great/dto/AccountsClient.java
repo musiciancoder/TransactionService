@@ -4,12 +4,12 @@ import jakarta.enterprise.context.ApplicationScoped;
 import org.great.rest.AccountServiceRest;
 
 import java.math.BigDecimal;
-//import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @ApplicationScoped
 public class AccountsClient {
 
-  //  @RestClient
+    @RestClient
     AccountServiceRest rest;
 
     public void reserve(String number, BigDecimal amount, String correlationId) {
