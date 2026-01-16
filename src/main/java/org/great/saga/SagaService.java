@@ -34,6 +34,8 @@ public class SagaService {
         t.amount = req.amount();
         t.description = req.description();
         t.status = "PENDING";
+        logger.info("Starting saga for transaction from {} to {} amount {}",
+                t.sourceAccount, t.targetAccount, t.amount);
         t.correlationId = correlationId;
         t.occurredAt = OffsetDateTime.now();
         repo.persist(t);
@@ -44,6 +46,8 @@ public class SagaService {
         try {
             logger.info("Saga started for transaction id {}", t.id);
             accounts.reserve(t.sourceAccount, t.amount, t.correlationId);
+            logger.info("Reserved amount {} from account {} for transaction id {}",
+                    t.amount, t.sourceAccount, t.id);
             accounts.credit(t.targetAccount, t.amount, t.correlationId);
             markCompleted(t);
         } catch (WebApplicationException ex) {
@@ -59,6 +63,7 @@ public class SagaService {
     @Transactional
     void markCompleted(Transaction t) {
         t.status = "COMPLETED";
+        logger.info("Saga completed for transaction id {}", t.id);
         events.emitCompleted(t);
     }
 

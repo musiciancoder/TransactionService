@@ -1,6 +1,6 @@
 package org.great.resource;
 
-import jakarta.annotation.security.RolesAllowed;
+//import jakarta.annotation.security.RolesAllowed;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
@@ -32,7 +32,7 @@ public class TransactionResource {
 
     @POST
     @Path("/start")
-    @RolesAllowed({"ROLE_USER","ROLE_ADMIN"})
+    //@RolesAllowed({"ROLE_USER","ROLE_ADMIN"})
     @Transactional
     public Response transfer(@Context HttpHeaders headers, @Valid TransactionRequest req) {
         logger.info("Transfer started from {} to {} amount {}",
