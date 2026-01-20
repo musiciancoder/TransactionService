@@ -1,4 +1,4 @@
-package main.java;
+package org.great.controller;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -8,8 +8,8 @@ import org.great.resource.TransactionResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Path("/hello")
-public class ExampleResource {
+@Path("/hello-world")
+public class FirstController {
 
     private final Logger logger = LoggerFactory.getLogger(TransactionResource.class);
 
