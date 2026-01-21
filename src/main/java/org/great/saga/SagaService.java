@@ -39,9 +39,15 @@ public class SagaService {
         t.correlationId = correlationId;
         t.occurredAt = OffsetDateTime.now();
         repo.persist(t);
+        logger.info("Persisted transaction id {} with correlation id {}",
+                t.id, t.correlationId);
+        repo.flush(); // force Hibernate to insert now and populate id
+        logger.info("Transaction id {} is ready for processing", t.id);
         return t;
     }
 
+    // Explicitly suspend any active JTA transaction
+    @Transactional(Transactional.TxType.NOT_SUPPORTED)
     public void execute(Transaction t) {
         try {
             logger.info("Saga started for transaction id {}", t.id);
@@ -60,14 +66,15 @@ public class SagaService {
         }
     }
 
-    @Transactional
+    // Each status change commits independently
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     void markCompleted(Transaction t) {
         t.status = "COMPLETED";
         logger.info("Saga completed for transaction id {}", t.id);
         events.emitCompleted(t);
     }
 
-    @Transactional
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     void markFailed(Transaction t, String reason) {
         t.status = "FAILED";
         events.emitFailed(t, reason);

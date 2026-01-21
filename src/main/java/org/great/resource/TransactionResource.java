@@ -45,7 +45,6 @@ public class TransactionResource {
 
         var t = saga.start(req, correlationId);
         saga.execute(t);
-
         return Response.ok(t).header("X-Correlation-Id", correlationId).build();
     }
 
