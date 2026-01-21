@@ -49,12 +49,14 @@ public class TransactionResource {
         return Response.ok(t).header("X-Correlation-Id", correlationId).build();
     }
 
-    @GET @Path("/{id}")
+    @GET
+    @Path("/{id}")
     public Response get(@PathParam("id") Long id) {
         return repo.findByIdOptional(id).map(Response::ok).orElse(Response.status(404)).build();
     }
 
-    @GET @Path("/by-account/{number}")
+    @GET
+    @Path("/by-account/{number}")
     public Response list(@PathParam("number") String number) {
         return Response.ok(repo.listByAccount(number)).build();
     }
